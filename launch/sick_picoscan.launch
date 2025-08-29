@@ -24,7 +24,11 @@
     <arg name="host_set_LFPintervalFilter" default="False" />                       <!-- If true, LFPintervalFilter is set at startup (default: false) -->
     <arg name="custom_pointclouds" default="cloud_unstructured_segments cloud_unstructured_fullframe cloud_polar_unstructured_segments cloud_polar_unstructured_fullframe cloud_all_fields_fullframe"/> <!-- Default pointclouds: segmented and fullframe pointclouds, with all layers and echos in both cartesian and polar coordinates -->
     <arg name="tf_publish_rate" default="10.0" />                     <!-- Rate to publish TF messages in hz, use 0 to deactivate TF messages -->
-    <node name="$(arg nodename)" pkg="sick_scan_xd" type="sick_generic_caller" respawn="true">    
+
+      <!-- Output: screen, log -->
+    <arg name="output" default="screen" />
+
+    <node name="$(arg nodename)" pkg="sick_scan_xd" type="sick_generic_caller" respawn="true" output="$(arg output)">    
         <param name="scanner_type" type="string" value="sick_picoscan"/>
 
         <!-- network settings: -->
