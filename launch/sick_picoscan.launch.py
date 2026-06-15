@@ -4,10 +4,16 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
 
 def generate_launch_description():
 
     ld = LaunchDescription()
+
+    # Output: screen, log
+    output_arg = DeclareLaunchArgument('output', default_value='screen')
+    ld.add_action(output_arg)
+    output = LaunchConfiguration('output')
     sick_scan_pkg_prefix = get_package_share_directory('sick_scan_xd')
     launchfile = os.path.basename(__file__)[:-3] # convert "<lidar_name>.launch.py" to "<lidar_name>.launch"
     launch_file_path = os.path.join(sick_scan_pkg_prefix, 'launch/' + launchfile) # 'launch/sick_picoscan.launch')
@@ -23,14 +29,16 @@ def generate_launch_description():
         node = Node(
             package='sick_scan_xd',
             node_executable='sick_generic_caller',
-            output='screen',
+            output=output,
+            respawn=True,
             arguments=node_arguments
         )
     else: # ROS versions eloquent and earlier require "node_executable", ROS foxy and later use "executable"
         node = Node(
             package='sick_scan_xd',
             executable='sick_generic_caller',
-            output='screen',
+            output=output,
+            respawn=True,
             arguments=node_arguments
         )
     
